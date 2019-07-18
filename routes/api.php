@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::group( [ 'prefix' => 'auth', [ 'middleware' => 'throttle:20,5'] ], function() {
+  // seharusnya controllernya pakai namespace Api\ tapi bisa disederhanakan di App\Providers\RouteServiceProvider::mapApiRoutes()
+  Route::post( 'register', 'Auth\RegisterController@register' );
+  Route::post( 'login', 'Auth\LoginController@login' );
+} );
